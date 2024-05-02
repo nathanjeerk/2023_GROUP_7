@@ -1,3 +1,6 @@
+//light
+#include <QDebug>
+#include <vtkLight.h>
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include <QMessageBox>
@@ -14,19 +17,12 @@
 #include <vtkImageReader2.h>
 #include <vtkSphereSource.h>
 #include <vtkTextureMapToSphere.h>
-
 //#include "VRRenderThread.h"
 
 //for color pallete
 #include <QColorDialog>
 #include <QColor>
 #include <QPalette>
-#include <QDebug>
-
-//light
-#include <vtkLight.h>
-
-
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -34,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    //add button on main widget window
     connect( ui->resetModelView, &QPushButton::released, this, &MainWindow::handleButton);
     connect( ui->changeModelColour, &QPushButton::released, this, &MainWindow::handleButton2);
     connect(ui->toggleVR, &QPushButton::released, this, &MainWindow::handleButton3);
@@ -41,10 +38,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect( this, &MainWindow::statusUpdateMessage, ui->statusbar, &QStatusBar::showMessage );
     //connect background button
     connect(ui->pushButton, &QPushButton::clicked, this, &MainWindow::changeBackground);
-
     //handle tree when clicked
     connect( ui->treeView, &QTreeView::clicked, this, &MainWindow::handleTreeClicked);
 
+    //add action to right click treeview
     ui->treeView->addAction(ui->actionItem_Options);
 
     //Initialises ModelPartList and link to treeView
@@ -56,24 +53,16 @@ MainWindow::MainWindow(QWidget *parent)
     for (int i = 0; i < 3; i++) {
         QString name = QString("TopLevel %1").arg(i);
         QString visible("true");
-
-        //child item
         ModelPart *childItem = new ModelPart({name, visible});
-        //append tree top level
         rootItem->appendChild(childItem);
 
-        //add 5 sub item
-        //for (int j = 0; j < 5; j++) {
-            //QString name = QString("Item %1,%2").arg(i).arg(j);
-            //QString visible("true");
-
-            //ModelPart *childChildItem = new ModelPart({name, visible});
-
-            //append to parents
-            //childItem->appendChild(childChildItem);
-        //}
+        for (int j = 0; j < 5; j++) {
+            QString name = QString("Item %1,%2").arg(i).arg(j);
+            QString visible("true");
+            ModelPart *childChildItem = new ModelPart({name, visible});
+            childItem->appendChild(childChildItem);
+        }
     }
-
     //link render to qt widget
     renderWindow = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
     ui->vtkWidget->setRenderWindow(renderWindow);
@@ -82,33 +71,7 @@ MainWindow::MainWindow(QWidget *parent)
     renderer = vtkSmartPointer<vtkRenderer>::New();
     renderWindow->AddRenderer(renderer);
 
-    //create object and add to renderer
-    vtkNew<vtkCylinderSource> cylinder;
-    cylinder->SetResolution(8);
-
-    //mapper
-    vtkNew<vtkPolyDataMapper> cylinderMapper;
-    cylinderMapper->SetInputConnection(cylinder->GetOutputPort());
     
-    //actor
-    vtkNew<vtkActor> cylinderActor;
-    cylinderActor->SetMapper(cylinderMapper);
-    cylinderActor->GetProperty()->SetColor(1., 0., 0.35);
-    cylinderActor->RotateX(30.0);
-    cylinderActor->RotateY(-45.0);
-
-    renderer->AddActor(cylinderActor);
-
-    //reset camera
-    renderer->ResetCamera();
-    renderer->GetActiveCamera()->Azimuth(30);
-    renderer->GetActiveCamera()->Elevation(30);
-    renderer->ResetCameraClippingRange();
-
-    //set default light intensity
-    light = vtkSmartPointer<vtkLight>::New();
-    renderer->AddLight(light);
-    light->SetIntensity(0.5);
 }
 
 MainWindow::~MainWindow()
@@ -124,13 +87,14 @@ void MainWindow::handleButton() {
     emit statusUpdateMessage( QString("Reset Model View was clicked"), 0);
 
     // Reset the camera view
-    if (renderer) {
-        // Reset the camera position and orientation to the origin point
-        renderer->GetActiveCamera()->SetPosition(0, 0, 1); // Set camera position to origin
-        renderer->GetActiveCamera()->SetFocalPoint(0, 0, 0); // Set camera focal point to origin
-        renderer->GetActiveCamera()->SetViewUp(0, 1, 0); // Set camera view up direction
-        renderer->ResetCameraClippingRange(); // Reset camera clipping range
-    }
+    //renderer->ResetCamera();
+    //renderWindow->Render();
+
+    //reset camera
+    renderer->ResetCamera();
+    renderer->GetActiveCamera()->Azimuth(30);
+    renderer->GetActiveCamera()->Elevation(30);
+    renderer->ResetCameraClippingRange();
 }
 
 void MainWindow::handleButton2() {
@@ -176,6 +140,8 @@ void MainWindow::handleButton3() {
 
     //vrThread->addActorOffline(actor);
     //vrThread->start();
+
+    //emit statusUpdateMessage(QString("VR LOADING.."), 0);
 }
 
 void MainWindow::handleTreeClicked() {
