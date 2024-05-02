@@ -63,7 +63,10 @@ MainWindow::MainWindow(QWidget *parent)
             //ModelPart *childChildItem = new ModelPart({name, visible});
             //childItem->appendChild(childChildItem);
         //}
+
+
     }
+
     //link render to qt widget
     renderWindow = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
     ui->vtkWidget->setRenderWindow(renderWindow);
@@ -85,7 +88,7 @@ MainWindow::~MainWindow()
 //handle for reset model view button
 void MainWindow::handleResetModelView() {
     QMessageBox msgBox;
-    msgBox.setText("Resetting Model View");
+    msgBox.setText("Model Reset successfully");
     msgBox.exec();
     //status bar
     emit statusUpdateMessage( QString("Reset Model View was clicked"), 0);
@@ -121,7 +124,7 @@ void MainWindow::handleModelColorChange() {
 
     if (ColorValue.isValid()) {
         // You can set the color of the part using the color value obtained from the color dialog
-        part->setColour(ColorValue.red(), ColorValue.green(), ColorValue.blue()); // Set RGB values (Optional)
+        part->setColour(ColorValue.red(), ColorValue.green(), ColorValue.blue()); // Set RGB values
         updateRender();
         emit statusUpdateMessage(QString("Model Color Change accepted"), 0);
     } else {
@@ -167,7 +170,7 @@ void MainWindow::on_actionOpen_File_triggered()
         "C:\\",
         tr("STL Files(*.stl);;Text Files(*.txt)")
     );
-
+    //logic
     if (!fileNames.isEmpty()) {
         for (const QString& fileName : fileNames) {
             emit statusUpdateMessage(QString("File " + fileName + " was opened"), 0);
@@ -185,7 +188,7 @@ void MainWindow::on_actionOpen_File_triggered()
     }
 }
 
-
+//update render from treeView
 void MainWindow::updateRenderFromTree( const QModelIndex& index ) {
     if (index.isValid()) {
         ModelPart* selectedPart = static_cast<ModelPart*>(index.internalPointer());
@@ -207,6 +210,7 @@ void MainWindow::updateRenderFromTree( const QModelIndex& index ) {
     }
 }
 
+//update the render
 void MainWindow::updateRender() {
     renderer->RemoveAllViewProps();
     updateRenderFromTree(partList->index(0, 0, QModelIndex()));
@@ -216,6 +220,7 @@ void MainWindow::updateRender() {
     renderer->ResetCameraClippingRange();
 }
 
+//right click option triggered handle
 void MainWindow::on_actionItem_Options_triggered() {
     
     ui->treeView->addAction(ui->actionItem_Options);
@@ -243,6 +248,7 @@ void MainWindow::on_actionItem_Options_triggered() {
         part->set(0, colour.name);
         part->set(1, QVariant(colour.isVisible).toString());
         part->setVisible(colour.isVisible);
+
         updateRender();
         emit statusUpdateMessage(QString("Dialog accepted"), 0);
     }
@@ -251,6 +257,7 @@ void MainWindow::on_actionItem_Options_triggered() {
     }
 }
 
+//save file function
 void MainWindow::on_actionSave_triggered()
 {   
     emit statusUpdateMessage("Save As action Triggered", 0);
@@ -272,7 +279,7 @@ void MainWindow::on_actionSave_triggered()
     }
 }
 
-
+//open directory function
 void MainWindow::on_actionOpen_Directory_triggered()
 {
     // Check if working
@@ -286,7 +293,7 @@ void MainWindow::on_actionOpen_Directory_triggered()
     );
 
     if (!directory.isEmpty()) {
-        emit statusUpdateMessage("Directory " + directory + " was selected", 0);
+        emit statusUpdateMessage("Directory " + directory + " was opened", 0);
 
         QDir dir(directory);
         QStringList filters;
@@ -316,12 +323,18 @@ void MainWindow::on_horizontalSlider_valueChanged(int value)
     ModelPart* selectedPart = static_cast<ModelPart*>(index.internalPointer());
     double intense = (value / 100.0);
     light->SetIntensity(intense);
+
+    emit statusUpdateMessage(QString("Adjusting light intensity"), 0);
 }
 
 //Background changing
 void MainWindow::changeBackground() {
+    emit statusUpdateMessage(QString("Changing background"), 0);
+
     // Open file dialog to select an image
     QString imagePath = QFileDialog::getOpenFileName(this, tr("Select Image"), "", tr("Image Files (*.png *.jpg *.bmp *.gif *.jpeg)"));
+
+    emit statusUpdateMessage(QString("File " + imagePath + " was changed to background"), 0);
 
     if (!imagePath.isEmpty()) {
         // Load the image using VTK's image reader

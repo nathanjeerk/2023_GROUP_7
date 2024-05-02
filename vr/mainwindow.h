@@ -57,6 +57,7 @@ public slots:
     void on_horizontalSlider_valueChanged(int value);
 
     void changeBackground();
+
 signals:
     void statusUpdateMessage( const QString & message, int timeout );
 
