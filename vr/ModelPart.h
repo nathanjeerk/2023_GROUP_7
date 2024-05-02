@@ -6,7 +6,7 @@
   *
   *     P Evans 2022
   */
-
+  
 #ifndef VIEWER_MODELPART_H
 #define VIEWER_MODELPART_H
 
@@ -14,18 +14,21 @@
 #include <QList>
 #include <QVariant>
 
-  /* VTK headers - will be needed when VTK used in next worksheet,
-   * commented out for now
-   *
-   * Note that there are a few function definitions and variables
-   * commented out below - this is because you haven't yet installed
-   * the VTK library which is needed.
-   */
+/* VTK headers - will be needed when VTK used in next worksheet,
+ * commented out for now
+ *
+ * Note that there are a few function definitions and variables
+ * commented out below - this is because you haven't yet installed
+ * the VTK library which is needed.
+ */
 #include <vtkSmartPointer.h>
 #include <vtkMapper.h>
 #include <vtkActor.h>
 #include <vtkSTLReader.h>
 #include <vtkColor.h>
+
+#include <vtkPolyDataMapper.h>
+#include <vtkProperty.h>
 
 class ModelPart {
 public:
@@ -60,9 +63,9 @@ public:
                                      * valid, but 'get' type functions are.
                                      */
 
-                                     /** Get number of data items (2 - part name and visibility string) in this case.
-                                       * @return number of visible data columns
-                                       */
+    /** Get number of data items (2 - part name and visibility string) in this case.
+      * @return number of visible data columns
+      */
     int columnCount() const;
 
     /** Return the data item at a particular column for this item.
@@ -79,7 +82,7 @@ public:
       * @param column is the index of the property to set
       * @param value is the value to apply
       */
-    void set(int column, const QVariant& value);
+    void set( int column, const QVariant& value );
 
     /** Get pointer to parent item
       * @return pointer to parent item
@@ -107,11 +110,11 @@ public:
     void setVisible(bool isVisible);
 
     /** Get visible flag
-      * @return visible flag as boolean
+      * @return visible flag as boolean 
       */
     bool visible();
-
-    /** Load STL file
+	
+	/** Load STL file
       * @param fileName
       */
     void loadSTL(QString fileName);
@@ -129,21 +132,23 @@ public:
 private:
     QList<ModelPart*>                           m_childItems;       /**< List (array) of child items */
     QList<QVariant>                             m_itemData;         /**< List (array of column data for item */
-    ModelPart* m_parentItem;       /**< Pointer to parent */
-
+    ModelPart*                                  m_parentItem;       /**< Pointer to parent */
+    vtkSmartPointer<vtkPolyDataMapper> m_mapper;
+    vtkSmartPointer<vtkActor> m_actor;
     /* These are some typical properties that I think the part will need, you might
      * want to add you own.
      */
     bool                                        isVisible;          /**< True/false to indicate if should be visible in model rendering */
-    unsigned char red, green, blue;
-    /* These are vtk properties that will be used to load/render a model of this part,
-     * commented out for now but will be used later
-     */
-    vtkSmartPointer<vtkSTLReader>               file;               /**< Datafile from which part loaded */
+	
+	/* These are vtk properties that will be used to load/render a model of this part,
+	 * commented out for now but will be used later
+	 */
+	vtkSmartPointer<vtkSTLReader>               file;               /**< Datafile from which part loaded */
     vtkSmartPointer<vtkMapper>                  mapper;             /**< Mapper for rendering */
     vtkSmartPointer<vtkActor>                   actor;              /**< Actor for rendering */
     vtkColor3<unsigned char>                    colour;             /**< User defineable colour */
-};
+};  
 
 
 #endif
+
