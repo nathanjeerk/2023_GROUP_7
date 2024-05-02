@@ -36,11 +36,11 @@ public:
     ModelPartList* partList;
 
 public slots:
-    void handleButton();
+    void handleResetModelView();
 
-    void handleButton2();
+    void handleModelColorChange();
 
-    void handleButton3();
+    void handleStartVR();
 
     void handleTreeClicked();
 

@@ -1,6 +1,7 @@
 //light
-#include <QDebug>
 #include <vtkLight.h>
+
+#include <QDebug>
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include <QMessageBox>
@@ -31,9 +32,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     //add button on main widget window
-    connect( ui->resetModelView, &QPushButton::released, this, &MainWindow::handleButton);
-    connect( ui->changeModelColour, &QPushButton::released, this, &MainWindow::handleButton2);
-    connect(ui->toggleVR, &QPushButton::released, this, &MainWindow::handleButton3);
+    connect( ui->resetModelView, &QPushButton::released, this, &MainWindow::handleResetModelView);
+    connect( ui->changeModelColour, &QPushButton::released, this, &MainWindow::handleModelColorChange);
+    connect(ui->toggleVR, &QPushButton::released, this, &MainWindow::handleStartVR);
     //status bar signal
     connect( this, &MainWindow::statusUpdateMessage, ui->statusbar, &QStatusBar::showMessage );
     //connect background button
@@ -56,12 +57,12 @@ MainWindow::MainWindow(QWidget *parent)
         ModelPart *childItem = new ModelPart({name, visible});
         rootItem->appendChild(childItem);
 
-        for (int j = 0; j < 5; j++) {
-            QString name = QString("Item %1,%2").arg(i).arg(j);
-            QString visible("true");
-            ModelPart *childChildItem = new ModelPart({name, visible});
-            childItem->appendChild(childChildItem);
-        }
+        //for (int j = 0; j < 5; j++) {
+            //QString name = QString("Item %1,%2").arg(i).arg(j);
+            //QString visible("true");
+            //ModelPart *childChildItem = new ModelPart({name, visible});
+            //childItem->appendChild(childChildItem);
+        //}
     }
     //link render to qt widget
     renderWindow = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
@@ -71,7 +72,9 @@ MainWindow::MainWindow(QWidget *parent)
     renderer = vtkSmartPointer<vtkRenderer>::New();
     renderWindow->AddRenderer(renderer);
 
-    
+    light = vtkSmartPointer<vtkLight>::New();
+    renderer->AddLight(light);
+    light->SetIntensity(0.5);
 }
 
 MainWindow::~MainWindow()
@@ -79,16 +82,13 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::handleButton() {
+//handle for reset model view button
+void MainWindow::handleResetModelView() {
     QMessageBox msgBox;
     msgBox.setText("Resetting Model View");
     msgBox.exec();
     //status bar
     emit statusUpdateMessage( QString("Reset Model View was clicked"), 0);
-
-    // Reset the camera view
-    //renderer->ResetCamera();
-    //renderWindow->Render();
 
     //reset camera
     renderer->ResetCamera();
@@ -97,7 +97,8 @@ void MainWindow::handleButton() {
     renderer->ResetCameraClippingRange();
 }
 
-void MainWindow::handleButton2() {
+//handle for model color changes
+void MainWindow::handleModelColorChange() {
 
     emit statusUpdateMessage(QString("Model Color Changing"), 0);
 
@@ -128,7 +129,7 @@ void MainWindow::handleButton2() {
     }
 }
 
-void MainWindow::handleButton3() {
+void MainWindow::handleStartVR() {
     //QModelIndex index = ui->treeView->currentIndex();
     //ModelPart* selectedPart = static_cast<ModelPart*>(index.internalPointer());
     //VRRenderThread* vrThread = new VRRenderThread(this);
@@ -141,7 +142,7 @@ void MainWindow::handleButton3() {
     //vrThread->addActorOffline(actor);
     //vrThread->start();
 
-    //emit statusUpdateMessage(QString("VR LOADING.."), 0);
+    emit statusUpdateMessage(QString("VR LOADING.."), 0);
 }
 
 void MainWindow::handleTreeClicked() {
@@ -210,6 +211,9 @@ void MainWindow::updateRender() {
     renderer->RemoveAllViewProps();
     updateRenderFromTree(partList->index(0, 0, QModelIndex()));
     renderer->Render();
+
+    renderer->ResetCamera();
+    renderer->ResetCameraClippingRange();
 }
 
 void MainWindow::on_actionItem_Options_triggered() {
@@ -252,10 +256,8 @@ void MainWindow::on_actionSave_triggered()
     emit statusUpdateMessage("Save As action Triggered", 0);
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"), "C:\\", tr("STL Files(*.stl);;Text Files(*.txt)"));
     if (!fileName.isEmpty()) {
-        // Saving logic here
+        // Saving logic
         emit statusUpdateMessage("File " + fileName + " was saved", 0);
-        // Implement your saving logic here using fileName
-        // For example, if you want to save some text to a file:
         QFile file(fileName);
         if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
             // Write to the file
@@ -308,7 +310,6 @@ void MainWindow::on_actionOpen_Directory_triggered()
 }
 
 //light intensity
-
 void MainWindow::on_horizontalSlider_valueChanged(int value)
 {
     QModelIndex index = ui->treeView->currentIndex();
