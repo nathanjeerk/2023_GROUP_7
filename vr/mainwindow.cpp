@@ -188,34 +188,36 @@ void MainWindow::handleTreeClicked() {
 }
 
 
-
+//open file
 void MainWindow::on_actionOpen_File_triggered()
 {
-    //check if working
-    emit statusUpdateMessage( QString("Open File action triggered" ), 0);
+    // Check if working
+    emit statusUpdateMessage(QString("Open File action triggered"), 0);
 
-    QString fileName = QFileDialog::getOpenFileName(
+    QStringList fileNames = QFileDialog::getOpenFileNames(
         this,
         tr("Open File"),
         "C:\\",
         tr("STL Files(*.stl);;Text Files(*.txt)")
-        );
+    );
 
-    if (fileName != "") {
-        emit statusUpdateMessage(QString("File " + fileName + "was opened"), 0);
+    if (!fileNames.isEmpty()) {
+        for (const QString& fileName : fileNames) {
+            emit statusUpdateMessage(QString("File " + fileName + " was opened"), 0);
 
-        QFileInfo fileInfo(fileName);
+            QFileInfo fileInfo(fileName);
 
-        QModelIndex index = ui->treeView->currentIndex();
-        QModelIndex part = partList->appendChild(index, {fileInfo.fileName(), QString("true")});
+            QModelIndex index = ui->treeView->currentIndex();
+            QModelIndex part = partList->appendChild(index, { fileInfo.fileName(), QString("true") });
 
-        ModelPart* viewPart = static_cast<ModelPart*>(part.internalPointer());
-        viewPart->loadSTL(fileName);
+            ModelPart* viewPart = static_cast<ModelPart*>(part.internalPointer());
+            viewPart->loadSTL(fileName);
+        }
 
         updateRender();
-
     }
 }
+
 
 void MainWindow::updateRenderFromTree( const QModelIndex& index ) {
     if (index.isValid()) {
