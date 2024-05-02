@@ -43,25 +43,36 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
-       <widget class="QPushButton" name="resetModelView">
-        <property name="text">
-         <string>Reset Model View</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QPushButton" name="resetModelView">
+          <property name="text">
+           <string>Reset Model View</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="changeModelColour">
+          <property name="text">
+           <string>Change Model Colour</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="toggleVR">
+          <property name="text">
+           <string>VR</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
-       <widget class="QPushButton" name="changeModelColour">
+       <widget class="QPushButton" name="pushButton">
         <property name="text">
-         <string>Change Model Colour</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="toggleVR">
-        <property name="text">
-         <string>VR</string>
+         <string>Background</string>
         </property>
        </widget>
       </item>
@@ -72,8 +83,8 @@
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>40</width>
-          <height>20</height>
+          <width>37</width>
+          <height>26</height>
          </size>
         </property>
        </spacer>
@@ -133,7 +144,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

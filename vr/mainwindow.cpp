@@ -3,6 +3,17 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include "optiondialog.h"
+#include <vtkPlaneSource.h>
+#include <vtkTextureMapToPlane.h>
+#include <vtkTexture.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkActor.h>
+#include <vtkRenderer.h>
+#include <vtkCamera.h>
+#include <vtkImageReader2Factory.h>
+#include <vtkImageReader2.h>
+#include <vtkSphereSource.h>
+#include <vtkTextureMapToSphere.h>
 
 //#include "VRRenderThread.h"
 
@@ -28,6 +39,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->toggleVR, &QPushButton::released, this, &MainWindow::handleButton3);
     //status bar signal
     connect( this, &MainWindow::statusUpdateMessage, ui->statusbar, &QStatusBar::showMessage );
+    //connect background button
+    connect(ui->pushButton, &QPushButton::clicked, this, &MainWindow::changeBackground);
 
     //handle tree when clicked
     connect( ui->treeView, &QTreeView::clicked, this, &MainWindow::handleTreeClicked);
@@ -336,3 +349,61 @@ void MainWindow::on_horizontalSlider_valueChanged(int value)
     light->SetIntensity(intense);
 }
 
+//Background changing
+void MainWindow::changeBackground() {
+    // Open file dialog to select an image
+    QString imagePath = QFileDialog::getOpenFileName(this, tr("Select Image"), "", tr("Image Files (*.png *.jpg *.bmp *.gif *.jpeg)"));
+
+    if (!imagePath.isEmpty()) {
+        // Load the image using VTK's image reader
+        vtkSmartPointer<vtkImageReader2Factory> readerFactory = vtkSmartPointer<vtkImageReader2Factory>::New();
+        vtkSmartPointer<vtkImageReader2> reader = readerFactory->CreateImageReader2(imagePath.toStdString().c_str());
+        if (!reader) {
+            qDebug() << "Failed to load image.";
+            return;
+        }
+        reader->SetFileName(imagePath.toStdString().c_str());
+        reader->Update();
+
+        // Create a texture from the image
+        vtkSmartPointer<vtkTexture> texture = vtkSmartPointer<vtkTexture>::New();
+        texture->SetInputConnection(reader->GetOutputPort());
+
+        // Create a sphere geometry
+        vtkSmartPointer<vtkSphereSource> sphereSource = vtkSmartPointer<vtkSphereSource>::New();
+        sphereSource->SetCenter(0, 0, 0);
+        sphereSource->SetRadius(100000); // Adjust radius as needed
+        sphereSource->SetPhiResolution(100); // Adjust resolution for smoother surface
+        sphereSource->SetThetaResolution(100);
+        sphereSource->Update();
+
+        // Map the texture onto the sphere
+        vtkSmartPointer<vtkTextureMapToSphere> mapToSphere = vtkSmartPointer<vtkTextureMapToSphere>::New();
+        mapToSphere->SetInputConnection(sphereSource->GetOutputPort());
+
+        // Create a sphere actor
+        vtkSmartPointer<vtkPolyDataMapper> sphereMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+        sphereMapper->SetInputConnection(mapToSphere->GetOutputPort());
+        vtkSmartPointer<vtkActor> sphereActor = vtkSmartPointer<vtkActor>::New();
+        sphereActor->SetMapper(sphereMapper);
+        sphereActor->SetTexture(texture);
+
+        // Rotate the sphere 180 degrees around the y-axis
+        sphereActor->RotateY(180.0);
+
+        // Add the actor to the renderer
+        renderer->AddActor(sphereActor);
+
+        // Set the material properties of the sphere actor to not receive lighting
+        vtkSmartPointer<vtkProperty> sphereProperty = sphereActor->GetProperty();
+        sphereProperty->SetAmbient(1.0);
+        sphereProperty->SetDiffuse(0.0);
+        sphereProperty->SetSpecular(0.0);
+
+        // Adjust camera clipping range to ensure the background sphere is always visible
+        renderer->ResetCameraClippingRange();
+
+        // Update the rendering window
+        renderWindow->Render();
+    }
+}
