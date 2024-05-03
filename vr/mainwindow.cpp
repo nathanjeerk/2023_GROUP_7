@@ -141,8 +141,8 @@ void MainWindow::handleStartVR() {
         return;
     }
 
-    //vrThread->addActorOffline(actor);
-    //vrThread->start();
+    vrThread->addActorOffline(actor);
+    vrThread->start();
 
     emit statusUpdateMessage(QString("VR LOADING.."), 0);
 }

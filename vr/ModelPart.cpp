@@ -146,12 +146,12 @@ void ModelPart::loadSTL( QString fileName ) {
     /* 1. Use the vtkSTLReader class to load the STL file 
      *     https://vtk.org/doc/nightly/html/classvtkSTLReader.html
      */
-    vtkSmartPointer<vtkSTLReader> reader = vtkSmartPointer<vtkSTLReader>::New();
-    reader->SetFileName(fileName.toStdString().c_str());
-    reader->Update();
+    file = vtkSmartPointer<vtkSTLReader>::New();
+    file->SetFileName(fileName.toStdString().c_str());
+    file->Update();
     /* 2. Initialise the part's vtkMapper */
     mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-    mapper->SetInputConnection(reader->GetOutputPort());
+    mapper->SetInputConnection(file->GetOutputPort());
 
     /* 3. Initialise the part's vtkActor and link to the mapper */
     actor = vtkSmartPointer<vtkActor>::New();
@@ -168,7 +168,6 @@ vtkSmartPointer<vtkActor> ModelPart::getActor() {
 }
 
 vtkActor* ModelPart::getNewActor() {
-    actor = vtkSmartPointer<vtkActor>::New();
     auto vrMapper = vtkSmartPointer<vtkDataSetMapper>::New();
     if (file == nullptr) {
         qDebug() << "File render is null, aborting";
