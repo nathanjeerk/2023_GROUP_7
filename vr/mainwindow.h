@@ -78,6 +78,9 @@ public slots:
     /**this function handle when change the background images**/
     void changeBackground();
 
+    /*asdasd*/
+    void updateVRRenderFromTree(const QModelIndex& index);
+
 signals:
     /**this function facilitates the emission of a status update message signal.
     * @param message is the first parameter
@@ -96,5 +99,7 @@ private:
     vtkSmartPointer<vtkGenericOpenGLRenderWindow> renderWindow;
 
     vtkSmartPointer<vtkLight> light;
+
+    VRRenderThread* vrThread;
 };
 #endif // MAINWINDOW_H

@@ -132,19 +132,45 @@ void MainWindow::handleModelColorChange() {
 }
 
 void MainWindow::handleStartVR() {
-    QModelIndex index = ui->treeView->currentIndex();
-    ModelPart* selectedPart = static_cast<ModelPart*>(index.internalPointer());
-    VRRenderThread* vrThread = new VRRenderThread(this);
-    auto actor = selectedPart->getNewActor();
+    //QModelIndex index = ui->treeView->currentIndex();
+    //ModelPart* selectedPart = static_cast<ModelPart*>(index.internalPointer());
+    vrThread = new VRRenderThread(this);
+   /* auto actor = selectedPart->getNewActor();
     if (actor == nullptr) {
         qDebug() << "Actor is null";
         return;
     }
 
     vrThread->addActorOffline(actor);
+
+    */
+
+    updateVRRenderFromTree(partList->index(0, 0, QModelIndex()));
+
     vrThread->start();
 
     emit statusUpdateMessage(QString("VR LOADING.."), 0);
+}
+
+void MainWindow::updateVRRenderFromTree(const QModelIndex& index) {
+    if (index.isValid()) {
+        ModelPart* selectedPart = static_cast<ModelPart*>(index.internalPointer());
+
+        vtkSmartPointer<vtkActor> actor = selectedPart->getNewActor();
+        if (actor != nullptr && selectedPart->visible()) {
+            vrThread->AddActorOffline(actor);
+
+        }
+    }
+
+    if (!partList->hasChildren(index) || (index.flags() & Qt::ItemNeverHasChildren)) {
+        return;
+    }
+
+    int rows = partList->rowCount(index);
+    for (int i = 0; i < rows; i++) {
+        updateVRRenderFromTree(partList->index(i, 0, index));
+    }
 }
 
 void MainWindow::handleTreeClicked() {
