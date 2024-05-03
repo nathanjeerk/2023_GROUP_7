@@ -59,12 +59,12 @@ MainWindow::MainWindow(QWidget *parent)
         ModelPart *childItem = new ModelPart({name, visible});
         rootItem->appendChild(childItem);
 
-        //for (int j = 0; j < 5; j++) {
-            //QString name = QString("Item %1,%2").arg(i).arg(j);
-            //QString visible("true");
-            //ModelPart *childChildItem = new ModelPart({name, visible});
-            //childItem->appendChild(childChildItem);
-        //}
+        /*for (int j = 0; j < 5; j++) {
+            QString name = QString("Item %1,%2").arg(i).arg(j);
+            QString visible("true");
+            ModelPart *childChildItem = new ModelPart({name, visible});
+            childItem->appendChild(childChildItem);
+        }*/
 
 
     }
@@ -196,6 +196,7 @@ void MainWindow::on_actionOpen_File_triggered()
         "C:\\",
         tr("STL Files(*.stl);;Text Files(*.txt)")
     );
+
     //logic
     if (!fileNames.isEmpty()) {
         for (const QString& fileName : fileNames) {
@@ -239,7 +240,9 @@ void MainWindow::updateRenderFromTree( const QModelIndex& index ) {
 //update the render
 void MainWindow::updateRender() {
     renderer->RemoveAllViewProps();
-    updateRenderFromTree(partList->index(0, 0, QModelIndex()));
+    for (int i = 0; i < partList->rowCount(QModelIndex()); i++){
+        updateRenderFromTree(partList->index(i, 0, QModelIndex()));
+    }
     renderer->Render();
 
     renderer->ResetCamera();
@@ -275,7 +278,7 @@ void MainWindow::on_actionItem_Options_triggered() {
         part->set(1, QVariant(colour.isVisible).toString());
         part->setVisible(colour.isVisible);
 
-        updateRender();
+        //updateRender();
         emit statusUpdateMessage(QString("Dialog accepted"), 0);
     }
     else {
