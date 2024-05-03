@@ -4,7 +4,7 @@
 
 #include <QDebug>
 #include "mainwindow.h"
-#include "./ui_mainwindow.h"
+#include "ui_mainwindow.h"
 #include <QMessageBox>
 #include <QFileDialog>
 #include "optiondialog.h"
@@ -19,6 +19,7 @@
 #include <vtkImageReader2.h>
 #include <vtkSphereSource.h>
 #include <vtkTextureMapToSphere.h>
+
 
 
 //for color pallete
@@ -158,7 +159,7 @@ void MainWindow::updateVRRenderFromTree(const QModelIndex& index) {
 
         vtkSmartPointer<vtkActor> actor = selectedPart->getNewActor();
         if (actor != nullptr && selectedPart->visible()) {
-            vrThread->AddActorOffline(actor);
+            vrThread->addActorOffline(actor);
 
         }
     }

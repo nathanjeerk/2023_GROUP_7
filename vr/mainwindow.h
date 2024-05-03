@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "ModelPartList.h"
+#include "VRRenderThread.h"
 
 
 #include <QVTKOpenGLNativeWidget.h>
@@ -16,6 +17,7 @@
 #include <vtkWidgetSet.h>
 #include <vtkCamera.h>
 #include <vtkProperty.h>
+
 
 #include <vtkLight.h>
 
@@ -34,10 +36,11 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
 
     ModelPartList* partList;
+
 
 public slots:
     /**This function handle resetting the view of model in graphical application.**/
@@ -63,7 +66,7 @@ public slots:
 
     /**this function refreshes the rendering of the scene, clears existing view props and updates the scene.**/
     void updateRender();
-    
+
     /**this function recursively updates the rendering of the scene based on the hierarchical structure.
     * @param index is the first parameter
     * @return updateRender from tree
@@ -86,20 +89,19 @@ signals:
     * @param message is the first parameter
     * @param timeout is the first parameter
     */
-    void statusUpdateMessage( const QString & message, int timeout );
+    void statusUpdateMessage(const QString& message, int timeout);
 
 private slots:
     /**this function handles the action of opening one or multiple files**/
     void on_actionOpen_File_triggered();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow* ui;
 
     vtkSmartPointer<vtkRenderer> renderer;
     vtkSmartPointer<vtkGenericOpenGLRenderWindow> renderWindow;
 
     vtkSmartPointer<vtkLight> light;
-
     VRRenderThread* vrThread;
 };
 #endif // MAINWINDOW_H
