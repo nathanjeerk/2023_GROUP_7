@@ -167,18 +167,18 @@ vtkSmartPointer<vtkActor> ModelPart::getActor() {
     return actor;
 }
 
-//vtkActor* ModelPart::getNewActor() {
-    //actor = vtkSmartPointer<vtkActor>::New();
-    //auto vrMapper = vtkSmartPointer<vtkDataSetMapper>::New();
-    //if (file == nullptr) {
-        //qDebug() << "File render is null, aborting";
-        //return nullptr;
-    //}
+vtkActor* ModelPart::getNewActor() {
+    actor = vtkSmartPointer<vtkActor>::New();
+    auto vrMapper = vtkSmartPointer<vtkDataSetMapper>::New();
+    if (file == nullptr) {
+        qDebug() << "File render is null, aborting";
+        return nullptr;
+    }
 
-    //vrMapper->SetInputConnection(file->GetOutputPort());
-    //vtkActor* newActor = vtkActor::New();
-    //newActor->SetMapper(vrMapper);
-    //newActor->SetProperty(actor->GetProperty());
-    //return newActor;
-//}
+    vrMapper->SetInputConnection(file->GetOutputPort());
+    vtkActor* newActor = vtkActor::New();
+    newActor->SetMapper(vrMapper);
+    newActor->SetProperty(actor->GetProperty());
+    return newActor;
+}
 

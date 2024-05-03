@@ -3,6 +3,10 @@
 
 #include <QDialog>
 
+/** @file changemodelcolor.h
+* This file contains the declarations of UI that shows up to change the color of model
+*/
+
 namespace Ui {
 class changeModelColor;
 }

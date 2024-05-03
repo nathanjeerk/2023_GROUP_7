@@ -1,5 +1,6 @@
 //light
 #include <vtkLight.h>
+#include "VRRenderThread.h"
 
 #include <QDebug>
 #include "mainwindow.h"
@@ -18,7 +19,7 @@
 #include <vtkImageReader2.h>
 #include <vtkSphereSource.h>
 #include <vtkTextureMapToSphere.h>
-//#include "VRRenderThread.h"
+
 
 //for color pallete
 #include <QColorDialog>
@@ -95,8 +96,6 @@ void MainWindow::handleResetModelView() {
 
     //reset camera
     renderer->ResetCamera();
-    renderer->GetActiveCamera()->Azimuth(30);
-    renderer->GetActiveCamera()->Elevation(30);
     renderer->ResetCameraClippingRange();
 }
 
@@ -133,14 +132,14 @@ void MainWindow::handleModelColorChange() {
 }
 
 void MainWindow::handleStartVR() {
-    //QModelIndex index = ui->treeView->currentIndex();
-    //ModelPart* selectedPart = static_cast<ModelPart*>(index.internalPointer());
-    //VRRenderThread* vrThread = new VRRenderThread(this);
-    //auto actor = selectedPart->getNewActor();
-    //if (actor == nullptr) {
-        //qDebug() << "Actor is null";
-        //return;
-    //}
+    QModelIndex index = ui->treeView->currentIndex();
+    ModelPart* selectedPart = static_cast<ModelPart*>(index.internalPointer());
+    VRRenderThread* vrThread = new VRRenderThread(this);
+    auto actor = selectedPart->getNewActor();
+    if (actor == nullptr) {
+        qDebug() << "Actor is null";
+        return;
+    }
 
     //vrThread->addActorOffline(actor);
     //vrThread->start();
