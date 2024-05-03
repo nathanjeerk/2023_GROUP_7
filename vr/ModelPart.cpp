@@ -129,7 +129,8 @@ unsigned char ModelPart::getColourB() {
 
 void ModelPart::setVisible(bool isVisible) {
     /* This is a placeholder function that you will need to modify if you want to use it */
-    this->isVisible = isVisible;
+    //this->isVisible = isVisible;
+    actor->SetVisibility(isVisible);
     /* As the name suggests ... */
 }
 
