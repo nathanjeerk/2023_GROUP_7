@@ -1,0 +1,195 @@
+\doxysection{Main\+Window Class Reference}
+\hypertarget{class_main_window}{}\label{class_main_window}\index{MainWindow@{MainWindow}}
+
+
+The \doxylink{class_main_window}{Main\+Window} class inherits from QMain\+Window and represents the main window of the application.  
+
+
+
+
+{\ttfamily \#include $<$mainwindow.\+h$>$}
+
+Inheritance diagram for Main\+Window\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_main_window}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_main_window_a6c6e3e530fdb09a5c9b438e5cd3b0540}\label{class_main_window_a6c6e3e530fdb09a5c9b438e5cd3b0540} 
+void {\bfseries handle\+Reset\+Model\+View} ()
+\begin{DoxyCompactList}\small\item\em This function handles resetting the view of the model in the graphical application. \end{DoxyCompactList}\item 
+\Hypertarget{class_main_window_ac4bc09558a0e94f843799340c3e60959}\label{class_main_window_ac4bc09558a0e94f843799340c3e60959} 
+void {\bfseries handle\+Model\+Color\+Change} ()
+\begin{DoxyCompactList}\small\item\em This function handles changing the model colors. \end{DoxyCompactList}\item 
+\Hypertarget{class_main_window_a6c2c5aa48f199ca33e1f1e8f591ec33e}\label{class_main_window_a6c2c5aa48f199ca33e1f1e8f591ec33e} 
+void {\bfseries handle\+Start\+VR} ()
+\begin{DoxyCompactList}\small\item\em This function handles starting the VR thread. \end{DoxyCompactList}\item 
+\Hypertarget{class_main_window_a143bb60757a3e3f88e208eedb2af7539}\label{class_main_window_a143bb60757a3e3f88e208eedb2af7539} 
+void {\bfseries handle\+Tree\+Clicked} ()
+\begin{DoxyCompactList}\small\item\em This function handles the action of clicking on an item in a tree view. \end{DoxyCompactList}\item 
+\Hypertarget{class_main_window_ad3d17973d3111f1ba9805217b6ab58cf}\label{class_main_window_ad3d17973d3111f1ba9805217b6ab58cf} 
+void {\bfseries on\+\_\+action\+Item\+\_\+\+Options\+\_\+triggered} ()
+\begin{DoxyCompactList}\small\item\em This function handles the action triggered by selecting "{}\+Item Options"{} from a menu. \end{DoxyCompactList}\item 
+\Hypertarget{class_main_window_ad550c61cfa05c7e528dedc6cf636ed10}\label{class_main_window_ad550c61cfa05c7e528dedc6cf636ed10} 
+void {\bfseries on\+\_\+action\+Save\+\_\+triggered} ()
+\begin{DoxyCompactList}\small\item\em This function handles the action of saving a file. \end{DoxyCompactList}\item 
+\Hypertarget{class_main_window_ac9f8cda19b50031449774e3f5f95d5b2}\label{class_main_window_ac9f8cda19b50031449774e3f5f95d5b2} 
+void {\bfseries on\+\_\+action\+Open\+\_\+\+Directory\+\_\+triggered} ()
+\begin{DoxyCompactList}\small\item\em This function handles the action of opening a directory. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_main_window_aa2a5945f9c4bf90022f0a7ad3db34c49}{update\+Render}} ()
+\begin{DoxyCompactList}\small\item\em This function refreshes the rendering of the scene, clears existing view props and updates the scene. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_main_window_a3efc38e6be895f53a3f973906e4174b8}{update\+Render\+From\+Tree}} (const QModel\+Index \&index)
+\begin{DoxyCompactList}\small\item\em This function recursively updates the rendering of the scene based on the hierarchical structure. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_main_window_afbcef9f3e5a68f8709c86299b0f5d6a9}{on\+\_\+horizontal\+Slider\+\_\+value\+Changed}} (int value)
+\begin{DoxyCompactList}\small\item\em This function handles the light intensity options. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_main_window_a91fa77e99443385c87729e57842a8663}{change\+Background}} ()
+\begin{DoxyCompactList}\small\item\em This function handles changing the background images. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_main_window_a435a09ac3e960a16611b6b919075cba5}{update\+VRRender\+From\+Tree}} (const QModel\+Index \&index)
+\begin{DoxyCompactList}\small\item\em This function updates the VR rendering from the tree. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_main_window_a86443ea744fda3e9bad328c2fd1c3d6b}{status\+Update\+Message}} (const QString \&message, int timeout)
+\begin{DoxyCompactList}\small\item\em This function facilitates the emission of a status update message signal. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_main_window_a996c5a2b6f77944776856f08ec30858d}{Main\+Window}} (QWidget \texorpdfstring{$\ast$}{*}parent=nullptr)
+\begin{DoxyCompactList}\small\item\em Constructor for the \doxylink{class_main_window}{Main\+Window} class. \end{DoxyCompactList}\item 
+\Hypertarget{class_main_window_ae98d00a93bc118200eeef9f9bba1dba7}\label{class_main_window_ae98d00a93bc118200eeef9f9bba1dba7} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+Main\+Window} ()
+\begin{DoxyCompactList}\small\item\em Destructor for the \doxylink{class_main_window}{Main\+Window} class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_main_window_a3fddd2c840f105b232035192fadaeee8}\label{class_main_window_a3fddd2c840f105b232035192fadaeee8} 
+\mbox{\hyperlink{class_model_part_list}{Model\+Part\+List}} \texorpdfstring{$\ast$}{*} {\bfseries part\+List}
+\begin{DoxyCompactList}\small\item\em A pointer to the list of model parts. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The \doxylink{class_main_window}{Main\+Window} class inherits from QMain\+Window and represents the main window of the application. 
+
+The \doxylink{class_main_window}{Main\+Window} class is forward declared here. It is defined in the \doxylink{namespace_ui}{Ui} namespace.
+
+
+\begin{DoxyParams}{Parameters}
+{\em parent} & is a pointer to the widget that is logically the parent of this window. It is passed to the QMain\+Window constructor. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_main_window_a996c5a2b6f77944776856f08ec30858d}\label{class_main_window_a996c5a2b6f77944776856f08ec30858d} 
+\index{MainWindow@{MainWindow}!MainWindow@{MainWindow}}
+\index{MainWindow@{MainWindow}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{MainWindow()}{MainWindow()}}
+{\footnotesize\ttfamily Main\+Window\+::\+Main\+Window (\begin{DoxyParamCaption}\item[{QWidget \texorpdfstring{$\ast$}{*}}]{parent = {\ttfamily nullptr} }\end{DoxyParamCaption})}
+
+
+
+Constructor for the \doxylink{class_main_window}{Main\+Window} class. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parent} & is a pointer to the widget that is logically the parent of this window. It is passed to the QMain\+Window constructor. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_main_window_a91fa77e99443385c87729e57842a8663}\label{class_main_window_a91fa77e99443385c87729e57842a8663} 
+\index{MainWindow@{MainWindow}!changeBackground@{changeBackground}}
+\index{changeBackground@{changeBackground}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{changeBackground}{changeBackground}}
+{\footnotesize\ttfamily void Main\+Window\+::change\+Background (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+This function handles changing the background images. 
+
+This function handles changing the background. \Hypertarget{class_main_window_afbcef9f3e5a68f8709c86299b0f5d6a9}\label{class_main_window_afbcef9f3e5a68f8709c86299b0f5d6a9} 
+\index{MainWindow@{MainWindow}!on\_horizontalSlider\_valueChanged@{on\_horizontalSlider\_valueChanged}}
+\index{on\_horizontalSlider\_valueChanged@{on\_horizontalSlider\_valueChanged}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{on\_horizontalSlider\_valueChanged}{on\_horizontalSlider\_valueChanged}}
+{\footnotesize\ttfamily void Main\+Window\+::on\+\_\+horizontal\+Slider\+\_\+value\+Changed (\begin{DoxyParamCaption}\item[{int}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+This function handles the light intensity options. 
+
+This function handles the change of light intensity.
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & is the new light intensity value. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_main_window_a86443ea744fda3e9bad328c2fd1c3d6b}\label{class_main_window_a86443ea744fda3e9bad328c2fd1c3d6b} 
+\index{MainWindow@{MainWindow}!statusUpdateMessage@{statusUpdateMessage}}
+\index{statusUpdateMessage@{statusUpdateMessage}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{statusUpdateMessage}{statusUpdateMessage}}
+{\footnotesize\ttfamily void Main\+Window\+::status\+Update\+Message (\begin{DoxyParamCaption}\item[{const QString \&}]{message,  }\item[{int}]{timeout }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+
+
+This function facilitates the emission of a status update message signal. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em message} & is the status update message. \\
+\hline
+{\em timeout} & is the duration for which the message should be displayed. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_main_window_aa2a5945f9c4bf90022f0a7ad3db34c49}\label{class_main_window_aa2a5945f9c4bf90022f0a7ad3db34c49} 
+\index{MainWindow@{MainWindow}!updateRender@{updateRender}}
+\index{updateRender@{updateRender}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{updateRender}{updateRender}}
+{\footnotesize\ttfamily void Main\+Window\+::update\+Render (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+This function refreshes the rendering of the scene, clears existing view props and updates the scene. 
+
+This function updates the render. \Hypertarget{class_main_window_a3efc38e6be895f53a3f973906e4174b8}\label{class_main_window_a3efc38e6be895f53a3f973906e4174b8} 
+\index{MainWindow@{MainWindow}!updateRenderFromTree@{updateRenderFromTree}}
+\index{updateRenderFromTree@{updateRenderFromTree}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{updateRenderFromTree}{updateRenderFromTree}}
+{\footnotesize\ttfamily void Main\+Window\+::update\+Render\+From\+Tree (\begin{DoxyParamCaption}\item[{const QModel\+Index \&}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+This function recursively updates the rendering of the scene based on the hierarchical structure. 
+
+This function updates the render from the tree view.
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & is the index of the item in the tree view. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_main_window_a435a09ac3e960a16611b6b919075cba5}\label{class_main_window_a435a09ac3e960a16611b6b919075cba5} 
+\index{MainWindow@{MainWindow}!updateVRRenderFromTree@{updateVRRenderFromTree}}
+\index{updateVRRenderFromTree@{updateVRRenderFromTree}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{updateVRRenderFromTree}{updateVRRenderFromTree}}
+{\footnotesize\ttfamily void Main\+Window\+::update\+VRRender\+From\+Tree (\begin{DoxyParamCaption}\item[{const QModel\+Index \&}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+This function updates the VR rendering from the tree. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & is the index of the item in the tree view. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{mainwindow_8h}{mainwindow.\+h}}\item 
+mainwindow.\+cpp\end{DoxyCompactItemize}
