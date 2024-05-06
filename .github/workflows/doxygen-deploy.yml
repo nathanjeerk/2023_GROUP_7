@@ -1,0 +1,27 @@
+name: doxygen-deploy
+on:
+  push:
+    branches: [gh-pages]
+
+jobs:
+  deploy-vr:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Install doxygen
+      run: sudo apt-get install -y doxygen
+
+    #Run Doxygen on vr folder
+    - name: Run Doxygen
+      working-directory: ${{github.workspace}}/vr
+      run: doxygen
+    
+    #Deploy html output from Doxygen to gh-pages branch
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@4.2.5
+      with:
+        # The branch the action should deploy to.
+        branch: gh-pages
+        # The folder the action should deploy.
+        folder: ${{github.workspace}}/vr/html
