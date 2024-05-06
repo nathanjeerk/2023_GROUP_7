@@ -1,14 +1,10 @@
-/**		@file VRRenderThread.cpp
-  *
-  *		EEEE2046 - Software Engineering & VR Project
-  *
-  *		Template to add VR rendering to your application.
-  *
-  *		P Evans 2022
+/** @file VRRenderThread.cpp
+  * @brief EEEE2046 - Software Engineering & VR Project
+  * Template to add VR rendering to your application.
+  * P Evans 2022
   */
 
 #include "VRRenderThread.h"
-
 
 /* Vtk headers */
 #include <vtkActor.h>
@@ -27,11 +23,9 @@
 #include <vtkDataSetmapper.h>
 #include <vtkCallbackCommand.h>
 
-
-/* The class constructor is called by MainWindow and runs in the primary program thread, this thread
- * will go on to handle the GUI (mouse clicks, etc). The OpenVRRenderWindowInteractor cannot be start()ed
- * in the constructor, as it will take control of the main thread to handle the VR interaction (headset 
- * rotation etc. This means that a second thread is needed to handle the VR.
+/**
+ * @brief Constructor for the VRRenderThread class.
+ * @param parent is a pointer to the parent QObject.
  */
 VRRenderThread::VRRenderThread( QObject* parent ) {
 	/* Initialise actor list */
@@ -43,17 +37,17 @@ VRRenderThread::VRRenderThread( QObject* parent ) {
 	rotateZ = 0.;
 }
 
-
-/* Standard destructor - this is important here as the class will be destroyed when the user
- * stops the VR thread, and recreated when the user starts it again. If class variables are 
- * not deallocated properly then there will be a memory leak, where the program's total memory
- * usage will increase for each start/stop thread cycle.
+/**
+ * @brief Destructor for the VRRenderThread class.
  */
 VRRenderThread::~VRRenderThread() {
 
 }
 
-
+/**
+ * @brief This function adds an actor to the actor collection.
+ * @param actor is a pointer to the vtkActor to be added.
+ */
 void VRRenderThread::addActorOffline( vtkActor* actor ) {
 
 	/* Check to see if render thread is running */
@@ -70,8 +64,11 @@ void VRRenderThread::addActorOffline( vtkActor* actor ) {
 	}
 }
 
-
-
+/**
+ * @brief This function issues a command to the VR thread.
+ * @param cmd is the command to be issued.
+ * @param value is the value associated with the command.
+ */
 void VRRenderThread::issueCommand( int cmd, double value ) {
 
 	/* Update class variables according to command */
@@ -95,9 +92,8 @@ void VRRenderThread::issueCommand( int cmd, double value ) {
 	}
 }
 
-/* This function runs in a separate thread. This means that the program 
- * can fork into two separate execution paths. This thread is triggered by
- * calling VRRenderThread::start()
+/**
+ * @brief This function runs in a separate thread.
  */
 void VRRenderThread::run() {
 	/* You might want to edit the 3D model once VR has started, however VTK is not "thread safe". 
@@ -143,11 +139,11 @@ void VRRenderThread::run() {
 	 * and will perform appropriate camera or actor manipulation
 	 * depending on the nature of the events.
 	 */
-	interactor = vtkOpenVRRenderWindowInteractor::New();									
-	interactor->SetRenderWindow(window);													
+	interactor = vtkOpenVRRenderWindowInteractor::New();
+	interactor->SetRenderWindow(window);
 	interactor->Initialize();
 	window->Render();
-	
+
 
 	/* Now start the VR - we will implement the command loop manually
 	 * so it can be interrupted to make modifications to the actors
@@ -156,16 +152,16 @@ void VRRenderThread::run() {
 	endRender = false;
 	t_last = std::chrono::steady_clock::now();
 
-	while( !interactor->GetDone() && !this->endRender ) {
-		interactor->DoOneEvent( window, renderer );
+	while (!interactor->GetDone() && !this->endRender) {
+		interactor->DoOneEvent(window, renderer);
 
-		/* Check to see if enough time has elapsed since last update 
+		/* Check to see if enough time has elapsed since last update
 		 * This looks overcomplicated (and it is, C++ loves to make things unecessarily complicated!) but
-		 * is really just checking if more than 20ms have elaspsed since the last animation step. The 
+		 * is really just checking if more than 20ms have elaspsed since the last animation step. The
 		 * complications comes from the fact that numbers representing time on computers don't usually have
 		 * standard second/millisecond units. Because everything is a class in C++, the converion from
 		 * computer units to seconds/milliseconds ends up looking like what you see below.
-		 * 
+		 *
 		 * My choice of 20ms is arbitrary, if this value is too small the animation calculations could begin to
 		 * interfere with the interator processes and make the simulation unresponsive. If it is too large
 		 * the animations will be jerky. Play with the value to see what works best.
@@ -193,12 +189,9 @@ void VRRenderThread::run() {
 			while ((a = (vtkActor*)actorList->GetNextActor())) {
 				a->RotateZ(rotateZ);
 			}
-			
+
 			/* Remember time now */
 			t_last = std::chrono::steady_clock::now();
 		}
 	}
 }
-
-
-

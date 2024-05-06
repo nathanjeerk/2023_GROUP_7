@@ -1,12 +1,9 @@
-/**     @file ModelPart.h
-  *
-  *     EEEE2076 - Software Engineering & VR Project
-  *
-  *     Template for model parts that will be added as treeview items
-  *
-  *     P Evans 2022
+/** @file ModelPart.h
+  * @brief EEEE2076 - Software Engineering & VR Project
+  * Template for model parts that will be added as treeview items
+  * P Evans 2022
   */
-  
+
 #ifndef VIEWER_MODELPART_H
 #define VIEWER_MODELPART_H
 
@@ -30,103 +27,129 @@
 #include <vtkPolyDataMapper.h>
 #include <vtkProperty.h>
 
+/**
+ * @class ModelPart
+ * @brief The ModelPart class represents a model part that will be added as a treeview item.
+ */
 class ModelPart {
 public:
-    /** Constructor
-     * @param data is a List (array) of strings for each property of this item (part name and visiblity in our case
-     * @param parent is the parent of this item (one level up in tree)
+    /**
+     * @brief Constructor for the ModelPart class.
+     * @param data is a list of QVariant items that represent the data of the model part.
+     * @param parent is a pointer to the parent ModelPart item.
      */
     ModelPart(const QList<QVariant>& data, ModelPart* parent = nullptr);
 
-    /** Destructor
-      * Needs to free array of child items
-      */
+    /**
+     * @brief Destructor for the ModelPart class.
+     */
     ~ModelPart();
 
-    /** Add a child to this item.
-      * @param item Pointer to child object (must already be allocated using new)
-      */
+    /**
+     * @brief This function appends a child item to this model part.
+     * @param item is a pointer to the child ModelPart item.
+     */
     void appendChild(ModelPart* item);
 
-    /** Return child at position 'row' below this item
-      * @param row is the row number (below this item)
-      * @return pointer to the item requested.
-      */
+    /**
+     * @brief This function returns a pointer to the child item in the specified row.
+     * @param row is the row index of the child item.
+     * @return a pointer to the child ModelPart item.
+     */
     ModelPart* child(int row);
 
-    /** Return number of children to this item
-      * @return number of children
-      */
-    int childCount() const;         /* Note on the 'const' keyword - it means that this function is valid for
-                                     * constant instances of this class. If a class is declared 'const' then it
-                                     * cannot be modifed, this means that 'set' type functions are usually not
-                                     * valid, but 'get' type functions are.
-                                     */
+    /**
+     * @brief This function returns the number of child items.
+     * @return the number of child items.
+     */
+    int childCount() const;
 
-    /** Get number of data items (2 - part name and visibility string) in this case.
-      * @return number of visible data columns
-      */
+    /**
+     * @brief This function returns the number of columns (properties) that this item has.
+     * @return the number of columns (properties).
+     */
     int columnCount() const;
 
-    /** Return the data item at a particular column for this item.
-      * i.e. either part name of visibility
-      * used by Qt when displaying tree
-      * @param column is column index
-      * @return the QVariant (represents string)
-      */
+    /**
+     * @brief This function returns the data associated with a column of this item.
+     * @param column is the column index of the item data.
+     * @return the data associated with the column.
+     */
     QVariant data(int column) const;
 
-
-    /** Default function required by Qt to allow setting of part
-      * properties within treeview.
-      * @param column is the index of the property to set
-      * @param value is the value to apply
-      */
+    /**
+     * @brief This function sets the data associated with a column of this item.
+     * @param column is the column index of the item data.
+     * @param value is the new value of the item data.
+     */
     void set( int column, const QVariant& value );
 
-    /** Get pointer to parent item
-      * @return pointer to parent item
-      */
+    /**
+     * @brief This function returns a pointer to the parent item.
+     * @return a pointer to the parent ModelPart item.
+     */
     ModelPart* parentItem();
 
-    /** Get row index of item, relative to parent item
-      * @return row index
-      */
+    /**
+     * @brief This function returns the row index of this item, relative to its parent.
+     * @return the row index of this item.
+     */
     int row() const;
 
-
-    /** Set colour
-      * (0-255 RGB values as ints)
-      */
+    /**
+     * @brief This function sets the color of the model part.
+     * @param R is the red component of the color.
+     * @param G is the green component of the color.
+     * @param B is the blue component of the color.
+     */
     void setColour(const unsigned char R, const unsigned char G, const unsigned char B);
 
+    /**
+     * @brief This function returns the red component of the color of the model part.
+     * @return the red component of the color.
+     */
     unsigned char getColourR();
+
+    /**
+     * @brief This function returns the green component of the color of the model part.
+     * @return the green component of the color.
+     */
     unsigned char getColourG();
+
+    /**
+     * @brief This function returns the blue component of the color of the model part.
+     * @return the blue component of the color.
+     */
     unsigned char getColourB();
 
-    /** Set visible flag
-      * @param isVisible sets visible/non-visible
-      */
+    /**
+     * @brief This function sets the visibility of the model part.
+     * @param isVisible is a boolean value that represents the visibility of the model part.
+     */
     void setVisible(bool isVisible);
 
-    /** Get visible flag
-      * @return visible flag as boolean 
-      */
+    /**
+     * @brief This function returns the visibility of the model part.
+     * @return a boolean value that represents the visibility of the model part.
+     */
     bool visible();
 	
-	/** Load STL file
-      * @param fileName
-      */
+    /**
+     * @brief This function loads an STL file.
+     * @param fileName is the name of the STL file.
+     */
     void loadSTL(QString fileName);
 
-    /** Return actor
-      * @return pointer to default actor for GUI rendering
-      */
+    /**
+     * @brief This function returns a smart pointer to the vtkActor to allow part to be rendered.
+     * @return a smart pointer to the vtkActor.
+     */
     vtkSmartPointer<vtkActor> getActor();
 
-    /** Return new actor for use in VR
-      * @return pointer to new actor
-      */
+    /**
+     * @brief This function returns a new actor for the model part.
+     * @return a pointer to the new vtkActor.
+     */
     vtkActor* getNewActor();
 
 private:
@@ -151,4 +174,3 @@ private:
 
 
 #endif
-

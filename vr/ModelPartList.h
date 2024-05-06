@@ -1,15 +1,11 @@
-/**     @file ModelPartList.h
-  *
-  *     EEEE2076 - Software Engineering & VR Project
-  *
-  *     Template for model part list that will be used to create the trewview.
-  *
-  *     P Evans 2022
+/** @file ModelPartList.h
+  * @brief EEEE2076 - Software Engineering & VR Project
+  * Template for model part list that will be used to create the treeview.
+  * P Evans 2022
   */
-  
+
 #ifndef VIEWER_MODELPARTLIST_H
 #define VIEWER_MODELPARTLIST_H
-
 
 #include "ModelPart.h"
 
@@ -21,83 +17,94 @@
 
 class ModelPart;
 
+/**
+ * @class ModelPartList
+ * @brief The ModelPartList class represents a list of model parts that will be used to create the treeview.
+ */
 class ModelPartList : public QAbstractItemModel {
     Q_OBJECT        /**< A special Qt tag used to indicate that this is a special Qt class that might require preprocessing before compiling. */
 public:
-    /** Constructor
-      *  Arguments are standard arguments for this type of class but are not used in this example.
-      * @param data is not used
-      * @param parent is used by the parent class constructor
-      */
+    /**
+     * @brief Constructor for the ModelPartList class.
+     * @param data is not used.
+     * @param parent is used by the parent class constructor.
+     */
     ModelPartList( const QString& data, QObject* parent = NULL );
 
-    /** Destructor
-      *  Frees root item allocated in constructor
-      */
+    /**
+     * @brief Destructor for the ModelPartList class.
+     */
     ~ModelPartList();
 
-    /** Return column count
-      * @param parent is not used
-      * @return number of columns in the tree view - "Part" and "Visible", i.e. 2 in this case
-      */
+    /**
+     * @brief This function returns the number of columns in the tree view.
+     * @param parent is not used.
+     * @return the number of columns in the tree view.
+     */
     int columnCount( const QModelIndex& parent ) const;
 
-    /** This returns the value of a particular row (i.e. the item index) and 
-      *  columns (i.e. either the "Part" or "Visible" property).
-      *  It is used by QT internally - this is how Qt retrieves the text to display in the TreeView
-      * @param index in a stucture Qt uses to specify the row and column it wants data for
-      * @param role is how Qt specifies what it wants to do with the data
-      * @return a QVariant which is a generic variable used to represent any Qt class type, in this case the QVariant will be a string
-      */
+    /**
+     * @brief This function returns the value of a particular row and columns.
+     * @param index in a structure Qt uses to specify the row and column it wants data for.
+     * @param role is how Qt specifies what it wants to do with the data.
+     * @return a QVariant which is a generic variable used to represent any Qt class type.
+     */
     QVariant data( const QModelIndex& index, int role ) const;
 
-    /** Standard function used by Qt internally.
-      * @param index in a stucture Qt uses to specify the row and column it wants data for
-      * @return a Qt item flags
-      */
+        /**
+     * @brief This function returns a Qt item flags.
+     * @param index in a structure Qt uses to specify the row and column it wants data for.
+     * @return a Qt item flags.
+     */
     Qt::ItemFlags flags( const QModelIndex& index ) const;
 
-
-    /** Standard function used by Qt internally.
-      */
+    /**
+     * @brief This function returns the header data.
+     * @param section is the section of the header.
+     * @param orientation is the orientation of the header.
+     * @param role is the role of the header.
+     * @return the header data.
+     */
     QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
 
-
-    /** Get a valid QModelIndex for a location in the tree (row is the row in the tree under "parent"
-      * or under the root of the tree if parent isnt specified. Column is either 0 = "Part" or 1 = "Visible" 
-      * in this example 
-      * @param row is the item index
-      * @param column is 0 or 1 - part name or visible stringstream
-      * @param parent where the row is referenced from, usually the tree root
-      * @return the QModelIndex structure
+    /**
+     * @brief This function returns a valid QModelIndex for a location in the tree.
+     * @param row is the row index of the item.
+     * @param column is the column index of the item.
+     * @param parent is the parent of the item.
+     * @return the QModelIndex structure.
      */
     QModelIndex index( int row, int column, const QModelIndex& parent ) const;
 
-
-    /** Take a QModelIndex for an item, get a QModel Index for its parent
-      * @param index of item
-      * @return index of parent
-      */
+    /**
+     * @brief This function returns a QModelIndex for the parent of the item.
+     * @param index of the item.
+     * @return index of the parent item.
+     */
     QModelIndex parent( const QModelIndex& index ) const;
 
-    /** Get number of rows (items) under an item in tree
-      *  @param is the parent, all items under this will be counted
-      *  @return number of children
-      */
+    /**
+     * @brief This function returns the number of rows (items) under an item in the tree.
+     * @param parent is the parent of the item.
+     * @return the number of child items.
+     */
     int rowCount( const QModelIndex& parent ) const;
 
-    /** Get a pointer to the root item of the tree
-      * @return the root item pointer
-      */
+    /**
+     * @brief This function returns a pointer to the root item of the tree.
+     * @return the root item pointer.
+     */
     ModelPart* getRootItem();
 
     /**
-      */
+     * @brief This function appends a child to the parent item.
+     * @param parent is the parent item.
+     * @param data is the data of the child item.
+     * @return the QModelIndex of the appended child.
+     */
     QModelIndex appendChild( QModelIndex& parent, const QList<QVariant>& data );
-
 
 private:
     ModelPart *rootItem;    /**< This is a pointer to the item at the base of the tree */
 };
 #endif
-

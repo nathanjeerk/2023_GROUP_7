@@ -5,7 +5,6 @@
 #include "ModelPartList.h"
 #include "VRRenderThread.h"
 
-
 #include <QVTKOpenGLNativeWidget.h>
 #include <vtkGenericOpenGLRenderWindow.h>
 #include <QVTKRenderWidget.h>
@@ -17,91 +16,163 @@
 #include <vtkWidgetSet.h>
 #include <vtkCamera.h>
 #include <vtkProperty.h>
-
-
 #include <vtkLight.h>
 
-/** @file mainwindow.h
-* This file contains the declarations of all exported functions in vtk libraries.
-*/
+/**
+ * @file mainwindow.h
+ * @brief This file contains the declarations of all exported functions in vtk libraries.
+ */
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
+/**
+ * @namespace Ui
+ * @brief The Ui namespace contains all the UI classes used in the application.
+ */
+
+/**
+ * @class MainWindow
+ * @brief The MainWindow class is forward declared here. It is defined in the Ui namespace.
+ */
 class MainWindow;
 }
 QT_END_NAMESPACE
 
+/**
+ * @class MainWindow
+ * @brief The MainWindow class inherits from QMainWindow and represents the main window of the application.
+ * 
+ * @param parent is a pointer to the widget that is logically the parent of this window. It is passed to the QMainWindow constructor.
+ */
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
+    /**
+     * @brief Constructor for the MainWindow class.
+     * 
+     * @param parent is a pointer to the widget that is logically the parent of this window. It is passed to the QMainWindow constructor.
+     */
     MainWindow(QWidget* parent = nullptr);
+
+    /**
+     * @brief Destructor for the MainWindow class.
+     */
     ~MainWindow();
 
+    /**
+     * @brief A pointer to the list of model parts.
+     */
     ModelPartList* partList;
 
-
 public slots:
-    /**This function handle resetting the view of model in graphical application.**/
+    /**
+     * @brief This function handles resetting the view of the model in the graphical application.
+     */
     void handleResetModelView();
 
-    /**This function handle the function where it change the model colors**/
+    /**
+     * @brief This function handles changing the model colors.
+     */
     void handleModelColorChange();
 
-    /**This function handle the function where it starts thread for VR**/
+    /**
+     * @brief This function handles starting the VR thread.
+     */
     void handleStartVR();
 
-    /**this function handles the action of clicking on an item in a tree view**/
+    /**
+     * @brief This function handles the action of clicking on an item in a tree view.
+     */
     void handleTreeClicked();
 
-    /**this function handles the action triggered by selecting "Item Options" from a menu**/
+    /**
+     * @brief This function handles the action triggered by selecting "Item Options" from a menu.
+     */
     void on_actionItem_Options_triggered();
 
-    /**this function handles the action of saving a file**/
+    /**
+     * @brief This function handles the action of saving a file.
+     */
     void on_actionSave_triggered();
 
-    /**this function handles the action of open directory**/
+    /**
+     * @brief This function handles the action of opening a directory.
+     */
     void on_actionOpen_Directory_triggered();
 
-    /**this function refreshes the rendering of the scene, clears existing view props and updates the scene.**/
+    /**
+     * @brief This function refreshes the rendering of the scene, clears existing view props and updates the scene.
+     */
     void updateRender();
 
-    /**this function recursively updates the rendering of the scene based on the hierarchical structure.
-    * @param index is the first parameter
-    * @return updateRender from tree
-    */
+    /**
+     * @brief This function recursively updates the rendering of the scene based on the hierarchical structure.
+     * 
+     * @param index is the index of the item in the tree view.
+     */
     void updateRenderFromTree(const QModelIndex& index);
 
-    /**this function handle the light intensity options
-    * @param value is the first parameter
-    */
+    /**
+     * @brief This function handles the light intensity options.
+     * 
+     * @param value is the new light intensity value.
+     */
     void on_horizontalSlider_valueChanged(int value);
 
-    /**this function handle when change the background images**/
+    /**
+     * @brief This function handles changing the background images.
+     */
     void changeBackground();
 
-    /*asdasd*/
+    /**
+     * @brief This function updates the VR rendering from the tree.
+     * 
+     * @param index is the index of the item in the tree view.
+     */
     void updateVRRenderFromTree(const QModelIndex& index);
 
 signals:
-    /**this function facilitates the emission of a status update message signal.
-    * @param message is the first parameter
-    * @param timeout is the first parameter
-    */
+    /**
+     * @brief This function facilitates the emission of a status update message signal.
+     * 
+     * @param message is the status update message.
+     * @param timeout is the duration for which the message should be displayed.
+     */
     void statusUpdateMessage(const QString& message, int timeout);
 
 private slots:
-    /**this function handles the action of opening one or multiple files**/
+    /**
+     * @brief This function handles the action of opening one or multiple files.
+     */
     void on_actionOpen_File_triggered();
 
 private:
+    /**
+     * @brief A pointer to the UI of the MainWindow class.
+     */
     Ui::MainWindow* ui;
 
+    /**
+     * @brief A smart pointer to the renderer.
+     */
     vtkSmartPointer<vtkRenderer> renderer;
+
+    /**
+     * @brief A smart pointer to the render window.
+     */
     vtkSmartPointer<vtkGenericOpenGLRenderWindow> renderWindow;
 
+    /**
+     * @brief A smart pointer to the light.
+     */
     vtkSmartPointer<vtkLight> light;
+
+    /**
+     * @brief A pointer to the VR render thread.
+     */
     VRRenderThread* vrThread;
 };
+
 #endif // MAINWINDOW_H
