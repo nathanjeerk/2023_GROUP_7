@@ -18,6 +18,12 @@
 #include <vtkProperty.h>
 #include <vtkLight.h>
 
+//For filters
+/*
+#include "ModelPart.h"
+#include <vtkDataSetMapper.h>
+*/
+
 /**
  * @file mainwindow.h
  * @brief This file contains the declarations of all exported functions in vtk libraries.
@@ -41,7 +47,7 @@ QT_END_NAMESPACE
 /**
  * @class MainWindow
  * @brief The MainWindow class inherits from QMainWindow and represents the main window of the application.
- * 
+ *
  * @param parent is a pointer to the widget that is logically the parent of this window. It is passed to the QMainWindow constructor.
  */
 class MainWindow : public QMainWindow
@@ -51,7 +57,7 @@ class MainWindow : public QMainWindow
 public:
     /**
      * @brief Constructor for the MainWindow class.
-     * 
+     *
      * @param parent is a pointer to the widget that is logically the parent of this window. It is passed to the QMainWindow constructor.
      */
     MainWindow(QWidget* parent = nullptr);
@@ -109,14 +115,14 @@ public slots:
 
     /**
      * @brief This function recursively updates the rendering of the scene based on the hierarchical structure.
-     * 
+     *
      * @param index is the index of the item in the tree view.
      */
     void updateRenderFromTree(const QModelIndex& index);
 
     /**
      * @brief This function handles the light intensity options.
-     * 
+     *
      * @param value is the new light intensity value.
      */
     void on_horizontalSlider_valueChanged(int value);
@@ -128,15 +134,19 @@ public slots:
 
     /**
      * @brief This function updates the VR rendering from the tree.
-     * 
+     *
      * @param index is the index of the item in the tree view.
      */
     void updateVRRenderFromTree(const QModelIndex& index);
 
+    //for filters
+    //void applyPartFilters();
+
+
 signals:
     /**
      * @brief This function facilitates the emission of a status update message signal.
-     * 
+     *
      * @param message is the status update message.
      * @param timeout is the duration for which the message should be displayed.
      */
@@ -148,11 +158,20 @@ private slots:
      */
     void on_actionOpen_File_triggered();
 
+    //for filters
+    /*
+    void on_checkBox_stateChanged(int arg1);
+
+    void on_checkBox_2_stateChanged(int arg1);
+    */
 private:
     /**
      * @brief A pointer to the UI of the MainWindow class.
      */
     Ui::MainWindow* ui;
+
+    //for filters
+    //ModelPartList* partList;
 
     /**
      * @brief A smart pointer to the renderer.
@@ -163,6 +182,12 @@ private:
      * @brief A smart pointer to the render window.
      */
     vtkSmartPointer<vtkGenericOpenGLRenderWindow> renderWindow;
+
+    //for filters
+    /*
+    bool isClippingApplied;
+    bool isShrinkApplied;
+    */
 
     /**
      * @brief A smart pointer to the light.

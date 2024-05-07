@@ -133,7 +133,7 @@ public:
      * @return a boolean value that represents the visibility of the model part.
      */
     bool visible();
-	
+
     /**
      * @brief This function loads an STL file.
      * @param fileName is the name of the STL file.
@@ -145,6 +145,12 @@ public:
      * @return a smart pointer to the vtkActor.
      */
     vtkSmartPointer<vtkActor> getActor();
+
+    //For the two filters
+    /*
+    vtkSmartPointer<vtkMapper> getMapper();
+
+    vtkSmartPointer<vtkSTLReader> getSource();*/
 
     /**
      * @brief This function returns a new actor for the model part.
@@ -162,7 +168,7 @@ private:
      * want to add you own.
      */
     bool                                        isVisible;          /**< True/false to indicate if should be visible in model rendering */
-	
+
 	/* These are vtk properties that will be used to load/render a model of this part,
 	 * commented out for now but will be used later
 	 */
@@ -170,7 +176,7 @@ private:
     vtkSmartPointer<vtkMapper>                  mapper;             /**< Mapper for rendering */
     vtkSmartPointer<vtkActor>                   actor;              /**< Actor for rendering */
     vtkColor3<unsigned char>                    colour;             /**< User defineable colour */
-};  
+};
 
 
 #endif

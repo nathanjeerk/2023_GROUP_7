@@ -24,6 +24,19 @@
 #include <QColor>
 #include <QPalette>
 
+//for filters
+/*
+#include <vtkProperty.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkSmartPointer.h>
+
+#include <vtkDataSetMapper.h>
+#include <vtkClipDataSet.h>
+#include <vtkShrinkFilter.h>
+#include <vtkPlane.h>
+#include <vtkActor.h>
+*/
+
 /**
  * @file mainwindow.h
  * @brief This file contains the declarations of all exported functions in vtk libraries.
@@ -32,7 +45,7 @@
 /**
  * @class MainWindow
  * @brief The MainWindow class inherits from QMainWindow and represents the main window of the application.
- * 
+ *
  * @param parent is a pointer to the widget that is logically the parent of this window. It is passed to the QMainWindow constructor.
  */
 MainWindow::MainWindow(QWidget *parent)
@@ -150,7 +163,7 @@ void MainWindow::handleStartVR() {
 
 /**
  * @brief This function updates the VR rendering from the tree.
- * 
+ *
  * @param index is the index of the item in the tree view.
  */
 void MainWindow::updateVRRenderFromTree(const QModelIndex& index) {
@@ -231,7 +244,7 @@ void MainWindow::on_actionOpen_File_triggered()
 
 /**
  * @brief This function updates the render from the tree view.
- * 
+ *
  * @param index is the index of the item in the tree view.
  */
 void MainWindow::updateRenderFromTree( const QModelIndex& index ) {
@@ -286,7 +299,7 @@ void MainWindow::updateRender() {
  * @brief This function handles the action triggered by selecting "Item Options" from a menu.
  */
 void MainWindow::on_actionItem_Options_triggered() {
-    
+
     // Add action to the tree view
     ui->treeView->addAction(ui->actionItem_Options);
     // Get current index in the tree view
@@ -340,7 +353,7 @@ void MainWindow::on_actionItem_Options_triggered() {
  * @brief This function handles the action of saving a file.
  */
 void MainWindow::on_actionSave_triggered()
-{   
+{
     // Emit status update message
     emit statusUpdateMessage("Save As action Triggered", 0);
     // Open save file dialog to select a STL or TXT file
@@ -416,7 +429,7 @@ void MainWindow::on_actionOpen_Directory_triggered()
 
 /**
  * @brief This function handles the change of light intensity.
- * 
+ *
  * @param value is the new light intensity value.
  */
 void MainWindow::on_horizontalSlider_valueChanged(int value)
@@ -501,3 +514,121 @@ void MainWindow::changeBackground() {
         renderWindow->Render();
     }
 }
+
+//for filters
+/*
+void MainWindow::on_checkBox_stateChanged(int arg1){
+    QModelIndex index = ui->treeView->currentIndex();
+    ModelPart* selectedPart = static_cast<ModelPart*>(index.internalPointer());
+    if(arg1){
+        emit statusUpdateMessage(QString("Clip filter applier"),0);
+        isClippingApplied = 1;
+        if (selectedPart != nullptr)
+            if (selectedPart->getSource()!=nullptr)
+                applyPartFilters();
+    }
+    else{
+        emit statusUpdateMessage(QString("Clip filter not applier"),0);
+        isClippingApplied = 0;
+        if (selectedPart != nullptr)
+            if (selectedPart->getSource()!=nullptr)
+                applyPartFilters();
+    }
+}
+
+
+void MainWindow::on_checkBox_2_stateChanged(int arg1)
+{
+    QModelIndex index = ui->treeView->currentIndex();
+    ModelPart* selectedPart = static_cast<ModelPart*>(index.internalPointer());
+    if(arg1){
+        emit statusUpdateMessage(QString("Shrink filter applier"),0);
+        isShrinkApplied = 1;
+        if (selectedPart != nullptr)
+            if (selectedPart->getSource()!=nullptr)
+                applyPartFilters();
+    }
+    else{
+        emit statusUpdateMessage(QString("Shrink filter not applier"),0);
+        if (selectedPart != nullptr)
+            if (selectedPart->getSource()!=nullptr)
+                applyPartFilters();
+    }
+}
+
+void MainWindow::applyPartFilters()
+{
+    vtkSmartPointer<vtkClipDataSet> clipFilter = vtkSmartPointer<vtkClipDataSet>::New();
+    vtkSmartPointer<vtkShrinkFilter> shrinkFilter = vtkSmartPointer<vtkShrinkFilter>::New();
+
+    QModelIndex index = ui->treeView->currentIndex();
+    ModelPart* selectedPart = static_cast<ModelPart*>(index.internalPointer());
+    if (isClippingApplied && isShrinkApplied)
+    {
+        // This will apply a clipping plane whose normal is the x-axis that crosses the x-axis at x=0
+        vtkSmartPointer<vtkPlane> planeLeft = vtkSmartPointer<vtkPlane>::New();
+        planeLeft->SetOrigin(0.0, 0.0, 0.0);
+        planeLeft->SetNormal(-1.0, 0.0, 0.0);
+        //clipFilter = vtkSmartPointer<vtkClipDataSet>::New();
+        clipFilter->SetInputConnection(selectedPart->getSource()->GetOutputPort());
+        clipFilter->SetClipFunction(planeLeft.Get());
+
+        // Create a vtkShrinkFilter object
+        //shrinkFilter = vtkSmartPointer<vtkShrinkFilter>::New();
+        // Set the input connection for the shrink filter
+        shrinkFilter->SetInputConnection(clipFilter->GetOutputPort());
+        // Set the shrink factor (0.8 in this case, meaning 20% shrinkage)
+        shrinkFilter->SetShrinkFactor(0.8);
+        // Update the shrink filter to process the input data
+        shrinkFilter->Update();
+
+        selectedPart->getMapper()->SetInputConnection(shrinkFilter->GetOutputPort());
+    }
+    else if (isClippingApplied)
+    {
+        // This will apply a clipping plane whose normal is the x-axis that crosses the x-axis at x=0
+        vtkSmartPointer<vtkPlane> planeLeft = vtkSmartPointer<vtkPlane>::New();
+        planeLeft->SetOrigin(0.0, 0.0, 0.0);
+        planeLeft->SetNormal(-1.0, 0.0, 0.0);
+        //clipFilter = vtkSmartPointer<vtkClipDataSet>::New();
+        clipFilter->SetInputConnection(selectedPart->getSource()->GetOutputPort());
+        clipFilter->SetClipFunction(planeLeft.Get());
+        selectedPart->getMapper()->SetInputConnection(clipFilter->GetOutputPort());
+
+    }
+    else if (isShrinkApplied)
+    {
+        // Create a vtkShrinkFilter object
+        //shrinkFilter = vtkSmartPointer<vtkShrinkFilter>::New();
+        // Set the input connection for the shrink filter
+        shrinkFilter->SetInputConnection(selectedPart->getSource()->GetOutputPort());
+        // Set the shrink factor (0.8 in this case, meaning 20% shrinkage)
+        shrinkFilter->SetShrinkFactor(0.8);
+        // Update the shrink filter to process the input data
+        shrinkFilter->Update();
+
+        selectedPart->getMapper()->SetInputConnection(shrinkFilter->GetOutputPort());
+    }
+    else
+    {
+        selectedPart->getMapper()->SetInputConnection(selectedPart->getSource()->GetOutputPort());
+    }
+
+
+    selectedPart->getActor()->SetMapper(selectedPart->getMapper());
+    selectedPart->getActor()->GetProperty()->SetColor(1., 0., 0.35);
+    //renderer->AddActor(selectedPart->getActor());
+    renderer->RemoveAllViewProps();
+    vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
+    actor->SetMapper(selectedPart->getMapper());
+    actor->GetProperty()->SetColor(1., 0., 0.35);
+    renderer->AddActor(actor);
+
+
+    //updateRender();
+
+
+    // updateRender();
+    renderer->GetRenderWindow()->Render();
+}
+*/

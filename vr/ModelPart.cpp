@@ -11,6 +11,13 @@
 #include <vtkSmartPointer.h>
 #include <vtkDataSetMapper.h>
 
+//for filters
+/*
+#include <vtkSTLReader.h>
+#include <vtkProperty.h>
+*/
+
+
 /**
  * @brief Constructor for the ModelPart class.
  * @param data is a list of QVariant items that represent the data of the model part.
@@ -79,9 +86,9 @@ int ModelPart::columnCount() const {
  * @return the data associated with the column.
  */
 QVariant ModelPart::data(int column) const {
-    /* Return the data associated with a column of this item 
+    /* Return the data associated with a column of this item
      *  Note on the QVariant type - it is a generic placeholder type
-     *  that can take on the type of most Qt classes. It allows each 
+     *  that can take on the type of most Qt classes. It allows each
      *  column or property to store data of an arbitrary type.
      */
     if (column < 0 || column >= m_itemData.size())
@@ -95,7 +102,7 @@ QVariant ModelPart::data(int column) const {
  * @param value is the new value of the item data.
  */
 void ModelPart::set(int column, const QVariant &value) {
-    /* Set the data associated with a column of this item 
+    /* Set the data associated with a column of this item
      */
     if (column < 0 || column >= m_itemData.size())
         return;
@@ -131,7 +138,7 @@ int ModelPart::row() const {
  */
 void ModelPart::setColour(const unsigned char R, const unsigned char G, const unsigned char B) {
     /* This is a placeholder function that you will need to modify if you want to use it */
-    
+
     /* As the name suggests ... */
     colour.Set(R, G, B);
     if (actor != nullptr) {
@@ -145,7 +152,7 @@ void ModelPart::setColour(const unsigned char R, const unsigned char G, const un
  */
 unsigned char ModelPart::getColourR() {
     /* This is a placeholder function that you will need to modify if you want to use it */
-    
+
     /* As the name suggests ... */
     return colour.GetRed();   // needs updating
 }
@@ -156,7 +163,7 @@ unsigned char ModelPart::getColourR() {
  */
 unsigned char ModelPart::getColourG() {
     /* This is a placeholder function that you will need to modify if you want to use it */
-    
+
     /* As the name suggests ... */
     return colour.GetGreen();   // needs updating
 }
@@ -167,7 +174,7 @@ unsigned char ModelPart::getColourG() {
  */
 unsigned char ModelPart::getColourB() {
    /* This is a placeholder function that you will need to modify if you want to use it */
-    
+
     /* As the name suggests ... */
     return colour.GetBlue();   // needs updating
 }
@@ -189,7 +196,7 @@ void ModelPart::setVisible(bool isVisible) {
  */
 bool ModelPart::visible() {
     /* This is a placeholder function that you will need to modify if you want to use it */
-    
+
     /* As the name suggests ... */
     return isVisible;
 }
@@ -200,8 +207,8 @@ bool ModelPart::visible() {
  */
 void ModelPart::loadSTL( QString fileName ) {
     /* This is a placeholder function that you will need to modify if you want to use it */
-    
-    /* 1. Use the vtkSTLReader class to load the STL file 
+
+    /* 1. Use the vtkSTLReader class to load the STL file
      *     https://vtk.org/doc/nightly/html/classvtkSTLReader.html
      */
     file = vtkSmartPointer<vtkSTLReader>::New();
@@ -214,6 +221,15 @@ void ModelPart::loadSTL( QString fileName ) {
     /* 3. Initialise the part's vtkActor and link to the mapper */
     actor = vtkSmartPointer<vtkActor>::New();
     actor->SetMapper(mapper);
+
+    //for filters
+    /*
+    file = vtkSTLReader::New();
+
+    mapper = vtkDataSetMapper::New();
+    actor = vtkActor::New();
+    */
+
 }
 
 /**
@@ -222,12 +238,40 @@ void ModelPart::loadSTL( QString fileName ) {
  */
 vtkSmartPointer<vtkActor> ModelPart::getActor() {
     /* This is a placeholder function that you will need to modify if you want to use it */
-    
+
     /* Needs to return a smart pointer to the vtkActor to allow
      * part to be rendered.
      */
     return actor;
 }
+
+//for filters
+/*
+vtkSmartPointer<vtkMapper> ModelPart::getMapper() {
+//This is a placeholder function that will be used in the next worksheet
+if(!mapper){
+    qDebug() << "mapper fail: " << data(0);
+    return nullptr;
+}
+qDebug() << "mapper: " << data(0);
+return mapper;
+//Needs to return a smart pointer to the vtkActor to allow
+     //part to be rendered.
+}
+
+vtkSmartPointer<vtkSTLReader> ModelPart::getSource() {
+    //This is a placeholder function that will be used in the next worksheet
+    if(!file){
+        qDebug() << "source fail: " << data(0);
+        return nullptr;
+    }
+    qDebug() << "source pass: " << data(0);
+    return file;
+    //Needs to return a smart pointer to the vtkActor to allow
+     //part to be rendered.
+}
+*/
+
 
 /**
  * @brief This function returns a new actor for the model part.
